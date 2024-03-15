@@ -1,0 +1,189 @@
+APP.JAVA
+
+package student.hibernatecreate;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
+public class App{
+    public static void main(String[] args) {
+        Configuration config = new Configuration();
+        config.configure("hibernate.cfg.xml");
+
+        SessionFactory sf = config.buildSessionFactory();
+        Session session = sf.openSession();
+
+        // Insert
+        student s1 = new student();
+        s1.setName("Nityanand");
+        s1.setAge(21);
+        s1.setMarks(85.25);
+        s1.setGender("male");
+
+        Transaction tx = session.beginTransaction();
+        session.save(s1);
+        tx.commit();
+
+        session.close();
+        sf.close();
+    }
+}
+
+Student.hbm.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+    <hibernate-mapping>
+    <class name="prvr.mavenhibernate.student" table="student">
+        <id name="id" type="int" column="id">
+            <generator class="increment" />
+        </id>
+        <property name="name">
+            <column name="name" />
+        </property>
+        <property name="age">
+            <column name="age" />
+        </property>
+        <property name="marks">
+            <column name="marks" />
+        </property>
+        <property name="gender">
+            <column name="gender" />
+        </property>
+    </class>
+</hibernate-mapping>
+
+
+Student.java
+
+package student.hibernatecreate;
+
+public class student {
+	private int id;
+	private String name;
+	private int age;
+	private double marks;
+	private String gender;
+	
+	public student() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	public student( String name, int age, double marks, String gender) {
+		super();
+//		this.id = id;
+		this.name = name;
+		this.age = age;
+		this.marks = marks;
+		this.gender = gender;
+	}
+	
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	public double getMarks() {
+		return marks;
+	}
+	public void setMarks(double marks) {
+		this.marks = marks;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	@Override
+	public String toString() {
+		return "student [id=" + id + ", name=" + name + ", age=" + age + ", marks=" + marks + ", gender=" + gender
+				+ "]";
+	}
+
+}
+
+
+Hibernate.cfg.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+	
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/crud</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">praveer</property>
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="show_sql">true</property>
+        <property name="hbm2ddl.auto">update</property>
+        <mapping resource="prvr/mavenhibernate/student.hbm.xml" />
+        
+    </session-factory>
+</hibernate-configuration>
+
+Pom.xml
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>student</groupId>
+  <artifactId>hibernatecreate</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>hibernatecreate</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+	  	  <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.33</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+<dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>5.4.24.Final</version>
+</dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
